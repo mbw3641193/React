@@ -2,7 +2,9 @@
 
 ## React的脚手架
 
-React是一个框架：具备自己开发的独立思想(MVC:model,view,controller)
+React是一个渐进式框架：具备自己开发的独立思想(MVC:model,view,controller)
+
+React全家桶：react / react-dom / react-router / redux / react-redux / axios / ant / dva / saga / mobx ...
 
 1. 划分组件开发
 2. 基于路由的SPA单页面开发
@@ -114,3 +116,21 @@ set HTTPS=true&&npm start         //开启https模式
 set PORT=63341&&npm start         //更换端口号
 ```
 ***
+
+## react  :  REACT框架核心部分
+
+- 提供了Component类可以供我们进行组件开发
+
+- 提供了钩子函数(生命周期函数) ---- 所有的生命周期函数 都是基于回调函数完成
+
+## react-dom  :  把JSX语法渲染成真实dom 的组件
+
+```
+ReactDOM.render([JSX],[container],[callback])    //把JSX元素渲染到页面中,callback一般不用
+                                                //JSX:虚拟dom   container:容器    callback:当把内容放到页面中时触发的回调函数，一般不用
+
+```
+
+## JSX
+
+react独有的语法 ：JAVASCRIPT + XML(HTML)
