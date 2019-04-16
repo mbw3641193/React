@@ -123,14 +123,66 @@ set PORT=63341&&npm start         //更换端口号
 
 - 提供了钩子函数(生命周期函数) ---- 所有的生命周期函数 都是基于回调函数完成
 
+***
+
 ## react-dom  :  把JSX语法渲染成真实dom 的组件
 
 ```
-ReactDOM.render([JSX],[container],[callback])    //把JSX元素渲染到页面中,callback一般不用
-                                                //JSX:虚拟dom   container:容器    callback:当把内容放到页面中时触发的回调函数，一般不用
+ReactDOM.render([JSX],[container],[callback]) 
+
+//把JSX元素渲染到页面中,callback一般不用
+//JSX:虚拟dom   container:容器    callback:当把内容放到页面中时触发的回调函数，一般不用
+
+let data = 'mbw';
+ReactDOM.render(<div id="box">hello world! {data}</div>, document.getElementById('root'), ()=>{
+    let oBox = document.getElementById('box');
+    console.log(oBox.innerHTML);
+});
 
 ```
+
+***
 
 ## JSX
 
 react独有的语法 ：JAVASCRIPT + XML(HTML)
+
+***
+- 不建议把JSX直接渲染到body当中，而是放在自己创建的容器中。一般我们都放在一个id为root的div当中即可
+
+- 在JSX中出现的{}是存放JS的，但是其中的JS必须要有返回结果
+    {}中不能直接放一个对象类型的值(对象，含有对象的数组，函数都不行)
+    {}中判断语句基本都不支持，但是支持map与三元运算符，map遍历的时候需要一个唯一KEY值
+
+- 给元素设置样式用的是className   className = "box"
+
+- style中不能直接的写样式字符串，需要基于一个样式对象来遍历赋值  style={{color:'red'}}
+***
+
+## JSX变为真实dom 原理
+
+```
+//参考项目中的JSX个人手写源码
+import {render,createElement} from './JSX_A+'
+
+let obj = createElement(
+    'h1',
+    { id: 'titleBox', className: 'title', style: { color: 'red' }, ref: 'AA', key: '12' },
+    '系统提示',
+    createElement(
+        'h2',
+        { id: 'titleBox1', className: 'title1', style: { color: 'green' } },
+        '系统提示',
+    ),
+    createElement(
+        'h3',
+        { id: 'titleBox3', className: 'title3', style: { color: 'black' } },
+        '系统提示',
+    ),
+);
+console.log(obj);
+render(obj, document.getElementById('root'), () => {
+    console.log('ok!');
+})
+
+```
