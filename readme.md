@@ -166,9 +166,9 @@ react独有的语法 ：JAVASCRIPT + XML(HTML)
 import {render,createElement} from './JSX_A+'
 
 let obj = createElement(
-    'h1',
-    { id: 'titleBox', className: 'title', style: { color: 'red' }, ref: 'AA', key: '12' },
-    '系统提示',
+    'h1',                                                                                       //=> type
+    { id: 'titleBox', className: 'title', style: { color: 'red' }, ref: 'AA', key: '12' },      //=> props
+    '系统提示',                                                                                 //=> children
     createElement(
         'h2',
         { id: 'titleBox1', className: 'title1', style: { color: 'green' } },
@@ -186,3 +186,68 @@ render(obj, document.getElementById('root'), () => {
 })
 
 ```
+## REACT 组件
+
+不管是vue还是react框架，设计之初都是期望我们按照'组件/模块管理'的方式来构建程序的。
+
+#### 优势
+
+1. 有助于多人协作开发
+
+2. 开发的组件可以被复用
+
+#### REACT组件的创建有两种方式
+
+1. 函数声明式组件（查看Dialog.js）
+
+2. 基于继承Component类来创建组件
+
+- createElement在处理的时候，遇到一个组件，返回的对象中type不再是字符串标签名，而是一个函数或者是一个类，但是属性还是存在props中
+
+```
+//index.js
+ReactDOM.render(<div>
+    <Dialog con='哈哈哈' lx={2}>
+        <span>1</span>
+    </Dialog>
+</div>, document.getElementById('root'));
+
+
+
+//Dialog.js
+import React from 'react';
+
+/***
+ * 函数声明式组件
+ * 1. 函数返回结果是一个JSX
+ * 2. PROPS变量存储的是一个对象，包含了调取组件时候传递的属性值（不传递也是个空对象）
+ */
+export default function Dialog(props) {
+    let { con, lx = 0 ,children} = props,
+        title = lx === 0 ? 'MBW' : 'mbw';
+//children 可能有可能没有，可能是值也可能是数组，但是都代表双闭合组件中的子元素
+    return <section>
+        <h2>{title}</h2>
+        <div>{con}</div>
+        {/**把属性中的子元素放到组件中的指定位置 */}
+        {children}
+        {/**也可以基于REACT中提供的专门遍历children的方法来完成遍历操作，一般用的不多 */}
+        {/* {React.Children.map(children,item=>item)} */}
+    </section>
+}
+
+
+//这是 Dialog.js return返回的对象
+{
+    type:Dialog,
+    props:{
+        lx:2,
+        con:'哈哈哈',
+        children:可能是一个值或者是一个数组
+    }
+}
+```
+> render渲染的时候需要做处理。type如果是字符串，就创建一个标签；如果是函数或者类，就把函数执行，把props中的每一项（包括children）传递给函数
+> 在执行函数的时候，把函数中return的JSX转换为新的对象（通过createElement），把这个对象返回，并Render按照以往的渲染方式，创建dom，并插入到指定容器即可
+
+
