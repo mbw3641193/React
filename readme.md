@@ -279,3 +279,41 @@ export default function Dialog(props) {
 ###### 参考 DialogComponent.js 与 state-function.js
 
 > 状态是读写的，是自己在组件中设定跟规划的(只有 类声明式 才有状态的管控)
+
+
+### 类声明中的方法要用箭头函数
+
+```
+support(event) {
+    console.log(this);
+
+    //this是undefined；event.target也可以获取当前的元素，但是我们不会去操作dom，所以也不用这个方法
+    //所以要想办法让方法中的this变成当前类的实例，这样就可以操作属性和状态等信息
+    //1.修改JSX：<button onClick={this.support.bind(this)}>支持</button>
+    //2.修改support方法为箭头函数 => 最常用的方式
+}
+
+support = event => {
+    console.log(this);
+}
+
+```
+
+### refs
+
+>react中专门提供 通过操作dom来实现需求的方式
+
+refs是一个对象，存储了当前组件中所有设置ref属性的元素
+
+```
+//JSX中：
+<span ref='spanleft'></span>
+
+//获取span节点：
+this.refs.spanleft
+```
+***
+- 基于REF操作DOM实现试图更新的，叫做'非受控组件'
+
+- 基于数据驱动(修改状态数据，react帮助我们重新渲染视图)完成的组件叫做'受控组件(受数据控制的组件)'
+***
