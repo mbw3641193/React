@@ -200,11 +200,20 @@ render(obj, document.getElementById('root'), () => {
 
 1. 函数声明式组件（查看Dialog.js）
 
-2. 基于继承Component类来创建组件
+    - 操作简单，但是功能较少，只是简单的调取和返回而已
+    - 静态组件，组件中的内容调取的时候就已经固定了，很难再修改
+
+2. 基于继承Component类来创建组件（查看DialogComponent.js）
+
+    - 操作复杂，但是可以实现复杂功能
+    - 能够使用生命周期函数操作业务
+    - 可以基于组件内部的状态来动态更新渲染的内容
+    - ...
 
 - createElement在处理的时候，遇到一个组件，返回的对象中type不再是字符串标签名，而是一个函数或者是一个类，但是属性还是存在props中
 
 ```
+//函数声明式组件demo
 //index.js
 ReactDOM.render(<div>
     <Dialog con='哈哈哈' lx={2}>
@@ -247,7 +256,24 @@ export default function Dialog(props) {
     }
 }
 ```
-> render渲染的时候需要做处理。type如果是字符串，就创建一个标签；如果是函数或者类，就把函数执行，把props中的每一项（包括children）传递给函数
-> 在执行函数的时候，把函数中return的JSX转换为新的对象（通过createElement），把这个对象返回，并Render按照以往的渲染方式，创建dom，并插入到指定容器即可
+###### render渲染的时候需要做处理。
+
+- type如果是字符串，就创建一个标签；
+
+- type如果是函数，就把函数执行（方法中的this是undefined），把props中的每一项（包括children）传递给函数；在执行函数的时候，把函数中return的JSX转换为新的对象（通过createElement），把这个对象返回，并按照以往Render的渲染方式，创建dom，并插入到指定容器即可；
+
+- type如果是类，会把当前类 new执行，创建类的一个实例（当前调取的就是他的实例）。new的时候会执行constructor，执行constructor后会执行this.render()，把render返回的JSX拿过来渲染。所以类声明式组件中必须有一个render方法，方法中返回一个JSX元素
+
+- 不管是哪种方式，最后都会把解析出来的props属性对象作为实参传递给对应的函数或者类
 
 
+
+## REACT中组件的两个重要概念
+
+### 1.属性
+
+> 属性是只读的，是调取组件的时候传递过来的信息
+
+### 2.状态
+
+> 状态是读写的，是自己在组件中设定跟规划的(只有 类声明式 才有状态的管控)
