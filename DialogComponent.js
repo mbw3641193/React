@@ -14,7 +14,7 @@ class Dialog extends React.Component {
         con: PropTypes.string.isRequired //传递的内容需要是一个字符串,并且是必填项
     };
 
-    AA=12;
+    AA=12;              //es6不支持这么书写，但是babel-react 会在webpack打包的时候给转译
     fn=()=>{
         console.log(1);
     }
@@ -35,14 +35,14 @@ class Dialog extends React.Component {
 
         // props:当render渲染并且把当前类执行创建实例的时候，会把JSX解析出来的props对象传递过来
 
-        // console.log(this); //this就是这个类的实例
+        console.log(this); //this就是这个类的实例
 
-        console.log(this.AA);
+        console.log(this.AA,this.fn());
 
     }
 
     render() {
-        // console.log(this.props); //不管constructor与super传不传props，在渲染的时候都会把props挂载到此处
+        console.log(this.props); //不管constructor与super传不传props，在渲染的时候都会把props挂载到此处
 
         let { lx, con, children } = this.props; //组件的属性是只读的，并且不允许被修改这个属性。只能在static defaultProps中添加规则
 
@@ -66,3 +66,4 @@ ReactDOM.render(<div>
         <span>123</span>
     </Dialog>
 </div>, document.getElementById('root'));
+
