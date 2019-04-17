@@ -276,4 +276,6 @@ export default function Dialog(props) {
 
 ### 2.状态
 
+###### 参考 DialogComponent.js 与 state-function.js
+
 > 状态是读写的，是自己在组件中设定跟规划的(只有 类声明式 才有状态的管控)
