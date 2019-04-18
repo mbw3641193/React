@@ -2,7 +2,7 @@
 
 ## React的脚手架
 
-React是一个渐进式框架：具备自己开发的独立思想(MVC:model,view,controller)
+React是一个渐进式MVC框架：具备自己开发的独立思想(MVC:model,view,controller)
 
 React全家桶：react / react-dom / react-router / redux / react-redux / axios / ant / dva / saga / mobx ...
 
@@ -281,7 +281,7 @@ export default function Dialog(props) {
 > 状态是读写的，是自己在组件中设定跟规划的(只有 类声明式 才有状态的管控)
 
 
-### 类声明中的方法要用箭头函数
+### 类声明中的方法要用箭头函数 -- 参考 Vote.js
 
 ```
 support(event) {
@@ -317,3 +317,64 @@ this.refs.spanleft
 
 - 基于数据驱动(修改状态数据，react帮助我们重新渲染视图)完成的组件叫做'受控组件(受数据控制的组件)'
 ***
+
+### REACT的双向数据绑定--onChange
+
+```
+//class:
+changeVal=event=>{
+    this.setState({
+        test : event.target.value
+    })
+}
+
+//JSX:
+<input type="text" value={this.state.test} onChange={this.changeVal}/>
+
+```
+
+### 生命周期函数(钩子函数) -- 参考 lifeCircle.js
+
+描述一个组件或者程序从创建到销毁的过程。我们可以在过程中间基于钩子函数完成一些自己的操作
+
+##### 1.基本流程
+
+- constructor               创建一个组件
+- componentWillMount        第一次渲染之前
+- render                    正在第一次渲染 
+- componentDidMount         第一次渲染之后
+
+##### 2.修改流程  
+
+###### 当组件状态数据发生改变(setState) 或者 传递给组件的属性发生改变(即重新调用组件传递不同属性),都会引起差异渲染(dom-diff)
+
+- shouldComponentUpdate     是否允许组件重新渲染
+- componentWillUpdate       重新渲染之前
+- render                    重新渲染
+- componentDidUpdate        重新渲染之后
+
+- componentWillReceiveProps     父组件把传递给子组件的属性发生改变后
+
+##### 3.销毁流程
+
+###### 原有渲染的内容不消失，只不过以后不能基于数据改变视图了
+
+- componentWillUnmount      卸载组件之前(一般不用)
+
+
+
+
+## 复合组件之间的信息传递 
+
+- 父组件把信息传递给子组件  ---1.通过props传递(参考 trans-props.js )  2.基于上下文传递(参考 trans-context.js )
+
+- 子组件把信息传递给父组件  ---把父组件中的方法作为属性传递给子组件，子组件执行方法(相当于执行父组件方法)
+
+
+## 复合组件之间的信息传递 
+
+> 基于REDUX进行状态管理，实现组件之间的信息传输(最常用的方案)
+
+## REDUX
+
+可以应用在任何项目中，react、vue、Jq项目都可以使用。react-redux才是专门给react项目提供的方案
