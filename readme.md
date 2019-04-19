@@ -378,3 +378,43 @@ changeVal=event=>{
 ## REDUX
 
 可以应用在任何项目中，react、vue、Jq项目都可以使用。react-redux才是专门给react项目提供的方案
+
+###### redux本质是一个发布订阅，原理参考 redux-my.js
+
+> 使用Redux:
+
+1. 安装redux
+
+```
+npm install redux react-redux --save
+```
+
+使用方式：参考redux-index.js
+
+#### 真实项目中的redux结构目录
+```
+    |-- store文件夹
+          |
+          |-- reducer文件夹
+          |       |
+          |       |-- index.js          //把每一个模块的reducer最后合并成为一个reducer
+          |       |
+          |       |-- vote.js         
+          |       |-- personal.js
+          |       |-- ...
+          |
+          |-- action文件夹              //存放每一个模块需要进行的派发任务(ActionCreator)
+          |       |
+          |       |-- index.js          //把每一个模块的action最后合并成为一个action
+          |       |
+          |       |-- vote.js         
+          |       |-- personal.js
+          |       |-- ...
+          |
+          |-- action-types.js           //所有派发任务的行为标识都在这里进行宏观管理
+          |
+          |-- index.js                  //创建store
+          |
+```
+
+
