@@ -391,7 +391,7 @@ npm install redux react-redux --save
 
 使用方式：参考redux-index.js
 
-#### 真实项目中的redux结构目录
+#### 真实项目中的redux结构目录  -- 参考 store文件夹
 ```
     |-- store文件夹
           |
@@ -415,6 +415,124 @@ npm install redux react-redux --save
           |
           |-- index.js                  //创建store
           |
+
+//使用store代码
+
+
+import React from 'react';
+import ReactDOM from 'react-dom';
+import store from './store';
+import action from './store/action';
+
+
+/******************BOX******************************/
+class Box extends React.Component {
+    constructor() {
+        super();
+    }
+
+    render() {
+        return <div>
+            <h1>this is a Box</h1>
+            <Header store={store}/>     //把属性传递给子组件
+            <Body store={store}/>       //把属性传递给子组件
+        </div>
+    }
+}
+
+/******************Header******************************/
+class Header extends React.Component {
+
+    constructor(props) {
+        super(props);
+        
+        let {store} = this.props,       //获取store并解构
+            {n,m} = store.getState().vote;
+
+        this.state = {
+            n,
+            m
+        }
+    }
+
+    componentDidMount(){
+
+        this.props.store.subscribe(()=>{ //状态改变的时候通知该方法执行
+            let {n,m} = store.getState().vote;
+            this.setState({
+                n,
+                m
+            })
+        })
+
+    }
+
+    render() {
+        return <div>
+            <h5>this is header</h5>
+            <h2>支持人数:{this.state.n}</h2>
+            <h2>反对人数:{this.state.m}</h2>
+            <hr />
+        </div>
+    }
+}
+
+/******************Body******************************/
+class Body extends React.Component {
+    constructor(props) {
+        super(props);
+        console.log(this.props);
+    }
+
+    support = () => {
+        let {store:{dispatch}} = this.props;  //dispatch 用来调用store中的方法改变属性
+        dispatch(action.vote.support())
+    }
+
+    against = () => {
+        let {store:{dispatch}} = this.props;
+        dispatch(action.vote.against())
+    }
+
+    render() {
+        // let {store:{dispatch}} = this.props;
+        
+        return <div>
+            <h5>this is a Body</h5>
+            <button onClick={this.support}>支持</button>
+            <button onClick={this.against}>反对</button>
+        </div>
+    }
+}
+
+ReactDOM.render(<Box></Box>, document.getElementById('root'))
+
+
+
+
 ```
+
+
+## REACT-REDUX  --使redux使用起来简单一些
+
+```
+/***
+ * react-redux 是把redux进一步封装，适配react项目，让redux操作更简洁
+ * 
+ * -- store文件夹的内容与 redux 一模一样
+ * -- 在组件调用的时候可以优化一些步骤:  
+ *      1.导出的不再是我们创建的组件，而是基于connect构造后的高阶组件
+ * 
+ * 1. Provider 跟组件
+ *      当前整个项目都在Provider组件下，作用就是把创建的store可以供内部任何后代组件使用，不再需要传属性了(NICE!)
+ * 
+ *      1. Provider组件中只允许出现一个子元素
+ *      2. 把创建的store基于属性传递给Provider(后代组件中都可以使用这个store了)
+ * 
+ * 2. connect  高阶组件
+ */
+```
+
+
 
 
