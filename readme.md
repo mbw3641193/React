@@ -513,7 +513,9 @@ ReactDOM.render(<Box></Box>, document.getElementById('root'))
 ```
 
 
-## REACT-REDUX  --使redux使用起来简单一些
+## REACT-REDUX  --使redux使用起来简单一些  
+
+###### 参考 some-demo/react-redux-demo文件夹
 
 ```
 /***
@@ -530,7 +532,70 @@ ReactDOM.render(<Box></Box>, document.getElementById('root'))
  *      2. 把创建的store基于属性传递给Provider(后代组件中都可以使用这个store了)
  * 
  * 2. connect  高阶组件
+ *      1. 导出的不再是我们创建的组件，而是基于connect构造后的组件export default connect(mapStateToProps,mapDispatchToProps)(自己创建的组件);
+ *      2. 以前我们需要自己基于subscribe向事件池追加方法，已达到容器状态信息改变，执行我们追加的方法，重新渲染组件的目的。而使用react-redux，所有用到redux状态信息的组件，都会向事件池中追加一个方法，当状态改变，通知方法执行，把最新的状态信息作为属性传递给组件，组件重新渲染
  */
+
+
+
+
+
+
+/*****************  index.js  ******************/
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+import {Provider} from 'react-redux';
+import store from '../src/store';
+
+import VoteBody from './component/VoteBody';
+import VoteFooter from './component/VoteFooter';
+
+
+ReactDOM.render(<Provider store={store}>
+    <VoteBody/>
+    <VoteFooter/>
+</Provider>, document.getElementById('root'));
+
+
+
+
+
+/*****************  组件内的正常用法  ******************/
+import { connect } from 'react-redux';
+import action from '../store/action';
+
+let mapStateToProps = (state) => {       //把redux容器中的状态信息遍历，赋值给当前组件的属性 state:redux容器中的状态信息
+    return {    //返回的是什么，就把什么挂载到当前组件的属性上
+        ...state.vote
+        
+    }
+}
+
+let mapDispatchToProps = (dispatch) => {    //把redux中的dispatch遍历，赋值给当前组件的属性 dispatch:store中存储的dispatch方法
+    return {    //返回的是什么方法，就把什么方法挂载到当前组件的属性上:一般我们挂载一些方法，用于完成dispatch的派发操作
+        support(){
+            dispatch(action.vote.support());
+        }
+    }
+}
+
+export default connect(mapStateToProps,mapDispatchToProps)(VoteBody);
+
+
+
+/*****************  组件内的简化用法  ******************/
+import { connect } from 'react-redux';
+import action from '../store/action';
+
+export default connect(state => ({ ...state.vote }), action.vote)(VoteBody);
+
+
+
+
+
+
+
 ```
 
 
