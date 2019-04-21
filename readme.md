@@ -274,6 +274,15 @@ export default function Dialog(props) {
 
 > 属性是只读的，是调取组件的时候传递过来的信息
 
+```
+var props = { foo: x, bar: y };
+var component = <Component { ...props } />;
+
+以上代码和下面代码完全相同
+
+var component = <Component foo={x} bar={y} />
+```
+
 ### 2.状态
 
 ###### 参考 DialogComponent.js 与 state-function.js
@@ -590,6 +599,7 @@ import action from '../store/action';
 
 export default connect(state => ({ ...state.vote }), action.vote)(VoteBody);
 
+//react-redux 帮我们把 action-creator中编写的方法(返回action对象的方法)，自动构建成dispatch派发任务的方法，也就是mapDispatchToProps这种格式
 
 
 
@@ -598,6 +608,136 @@ export default connect(state => ({ ...state.vote }), action.vote)(VoteBody);
 
 ```
 
+## REDUX 与 REACT-REDUX 源码(个人开发)      
 
+> --- redux-A+文件夹内
+
+## 基于 REDUX 与 REACT-REDUX 完成一个 TODO demo
+
+> --- Todo文件夹内
+
+
+## REACT-ROUTER-DOM
+
+###### npm install react-router-dom --save
+
+```
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+import {BrowserRouter,HashRouter,Route,Switch,Redirect} from 'react-router-dom';
+
+import A from './component/A';
+import B from './component/B';
+import C from './component/C';
+/***
+ * 单页面应用(SPA)
+ * - 使用REACT路由实现SPA
+ * 
+ * 1. 使用react-router-dom  最新版本react路由  https://reacttraining.com/react-router/web/api/Redirect/to-object
+ * 
+ * 2. BrowserRouter[浏览器路由] VS  HashRouter[哈希路由]
+ *      
+ *      BrowserRouter:
+ *      他是基于H5中的history API (pushState,replaceState,popState)来保持UI和URL同步。真实项目中应用的不多，因为history API不稳定，并且当前项目基于服务器渲染才会选择浏览器路由
+ *      http://www.demo.com/
+ *      http://www.demo.com/personal
+ *      http://www.demo.com/personal/login
+ * 
+ * 
+ * -----------------------
+ *      HashRouter:
+ *      真实项目中(前后端分离的项目，客户端渲染)，我们经常使用哈希路由来完成，他依据相同的页面地址，不同的哈希值，来规划当前页面中的哪一个组件呈现渲染，它基于原生js构造了一套类似于histpry API
+ * 的机智，每一次路由切换都是基于 history stack 完成的。
+ *      http://www.demo.com/#/
+ *      http://www.demo.com/#/personal
+ *      http://www.demo.com/#/personal/login
+ * 
+ *      1. 当前项目一旦使用hashRouter，则默认在页面地址后面加上#
+ *      2. HashRouter中只能出现一个子元素
+ *      3. HashRouter机制中，我们需要根据哈希地址不同，展示不同的组件内容。此时我们需要使用Route
+ * 
+ * 
+ * -----------------------
+ *      Route：
+ *      Route有如下几个属性：
+ *          path:匹配哈希后面的值(地址)
+ *          component:一旦哈希值和当前route的path相同了，则渲染component指定的组件
+ *          exact:严格匹配
+ * 
+ *               如果不加严格匹配：
+ *               #/user 能同时匹配A和B
+ *               #/user2 能匹配A不能匹配B
+ * 
+ *          strict:严格匹配并且最后必须有斜杠 #/user/
+ *          render:当页面的哈希地址和path匹配，会把render规定的方法执行。方法一般用来做权限校验
+ *          
+ * -----------------------
+ *      Switch：
+ * 
+ *      默认情况下，会和每一个Route都做校验(哪怕之前已经有校验成功的)
+ *      > 使用Switch组件可以解决这个问题。只要有一种情况校验成功，就不再向后校验了
+ * -----------------------
+ *      Redirect:
+ *      
+ *      1. <Redirect to='/user'/> 
+ *      2. <Redirect to={
+ *              pathname:,  定向地址
+ *              search: 给定向地址问号传参=>根据问号参数值来统计是正常进入首页还是非正常跳转;也可以做其他事情
+ *              state: 给定向后的组件传递一些信息
+ *          }/>  
+ * 
+ *      3. push:如果设置了这个属性，当前跳转的地址会加入到history stack中一条记录  ，方便返回等操作
+ * 
+ *      4. from:设定当前来源的页面地址  <Redirect  from='/user' to='/user/list'/> : 如果请求的地址是user，重定向到user/list
+ * -----------------------
+ */
+
+
+
+
+ReactDOM.render(<HashRouter>
+    <Switch>
+        <Route path='/' exact component={A}/>
+        <Route path='/user' exact component={B}/>
+        <Route path='/pay' exact render={()=>{
+            //一般在render中处理的是权限校验
+            let flag = localStorage.getItem('FLAG');
+            if(flag && flag=='safe') {
+                return <C/>;
+            }else{
+                return <A/>;
+            }
+            
+        }}/>
+
+        {/* 上述都设置完成后，会在末尾设置一个匹配：以上都不符合的情况下，路由地址是非法地址，做一些特殊处理 */}
+        {/* <Redirect to='/?lx=404'/>   与下面写法一样*/}
+        <Redirect
+        to={{
+            pathname: "/",
+            search: "?lx=404",
+        }}
+        />
+
+    </Switch>
+</HashRouter>, document.getElementById('root'));
+
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+https://segmentfault.com/a/1190000013428884
 
 

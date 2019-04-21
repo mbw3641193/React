@@ -8,10 +8,12 @@
 import {combineReducers} from 'redux';
 import vote from './vote';
 import personal from './personal';
+import todo from './todo';
 
 let reducer = combineReducers({
     vote,
-    personal
+    personal,
+    todo
 });
 
 export default reducer;
